@@ -1,16 +1,17 @@
 {{- $volumes := .Values.persistence.volumes }}
+{{- $releaseName := .Release.Name }}
 
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "gerrit.fullname" . }}
   labels:
-    app: {{ include "gerrit.name" . }}
-    chart: {{ include "gerrit.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "gerrit.name" . }}
+    helm.sh/chart: {{ include "gerrit.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: {{ include "gerrit.name" . }}
@@ -25,14 +26,21 @@ spec:
         - name: fix-volume-permissions
           image: busybox
           command: ["sh", "-c", "chown -R 1000:1000 /var/gerrit"]
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 1
+            limits:
+              memory: 1Gi
+              cpu: 1
           volumeMounts:
   {{- range $volumes }}
             - name: gerrit-{{ .name }}
-              mountPath: {{ .path }}
+              mountPath: /var/gerrit/{{ .name }}
   {{end}}
       containers:
         - name: {{ .Chart.Name }}
-          image: "gerritcodereview/gerrit:2.15.3"
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: IfNotPresent
           command: ["sh", "-c", "cp /var/gerrit/config/initialize-gerrit.sh /var/gerrit && sh /var/gerrit/initialize-gerrit.sh"]
           ports:
@@ -66,7 +74,7 @@ spec:
               mountPath: /var/gerrit/config
   {{- range $volumes }}
             - name: gerrit-{{ .name }}
-              mountPath: {{ .path }}
+              mountPath: /var/gerrit/{{ .name }}
   {{end}}
 {{end}}
           resources:
@@ -88,6 +96,6 @@ spec:
   {{- range $volumes }}
         - name: gerrit-{{ .name }}
           persistentVolumeClaim:
-            claimName: gerrit-{{ .name }}
+            claimName: {{ $releaseName }}-{{ .name }}
   {{end}}
 {{end}}

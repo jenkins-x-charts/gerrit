@@ -2,12 +2,9 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-
 image:
-  org: gerritcodereview
-  name: gerrit
-  tag: 2.15.2-ubuntu16
+  repository: docker.io/gerritcodereview/gerrit
+  tag: 2.15.3
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -19,7 +16,7 @@ service:
     http:
       port: 8080
       targetPort: 8080
-    ssh: 
+    ssh:
       port: 29418
       targetPort: 29418
 
@@ -35,16 +32,12 @@ persistence:
   volumes:
   - name: git
     size: 4Gi
-    path: /var/gerrit/git
   - name: etc
     size: 4Gi
-    path: /var/gerrit/etc
   - name: index
     size: 4Gi
-    path: /var/gerrit/index
   - name: cache
     size: 4Gi
-    path: /var/gerrit/cache
 
 postgres:
   postgresDatabase: reviewdb
@@ -53,16 +46,9 @@ postgres:
 
 config:
   auth:
-    type: DEVELOPMENT_BECOME_ANY_ACCOUNT
-  database:
-    database: reviewdb
-    username: gerrit
-    password: secret
+    type: OpenID
   index:
     type: LUCENE
-  cache:
-    directory: cache
-
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -77,7 +63,3 @@ resources: {}
   #  memory: 128Mi
 
 nodeSelector: {}
-
-tolerations: []
-
-affinity: {}

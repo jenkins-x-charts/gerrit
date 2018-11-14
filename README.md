@@ -6,7 +6,7 @@ version control system. Gerrit makes code review easy by providing a lightweight
 ## QuickStart
 
 ```bash
-$ helm install stable/gerrit
+$ helm install jenkinsxio/gerrit
 ```
 
 ## Installing the Chart
@@ -14,7 +14,7 @@ $ helm install stable/gerrit
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install --name my-release stable/gerrit
+$ helm install --name my-release jenkinsxio/gerrit
 ```
 
 ## Uninstalling the Chart
@@ -67,4 +67,4 @@ tls:
   secretName: gerrit.example.com
 ```
 
-This assumes that you have a domain that resolves to the cluster (for instance, to an ELB that forwards to your Ingress controller), as well as a valid TLS certificate for that domain stored in a secret called `gerrit.example.com`. You could then pass it to helm when you install the chart: `helm install -f myValues.yaml stable/gerrit`.
+This assumes that you have a domain that resolves to the cluster (for instance, to an ELB that forwards to your Ingress controller), as well as a valid TLS certificate for that domain stored in a secret called `gerrit.example.com`. You could then pass it to helm when you install the chart: `helm install -f myValues.yaml jenkinsxio/gerrit`.

@@ -36,11 +36,6 @@ The default configuration values for this chart are listed in `values.yaml`.
 | `image.repository`                    | Repository for container image                               | docker.io/gerritcodereview/gerrit                               |
 | `image.tag`                           | Container image tag                                          | 2.15.3                                           |
 | `image.pullPolicy`                    | Image pull policy                                            | IfNotPresent                                      |
-| `service.type`                        | Type for the service                                         | ClusterIP                                         |
-| `service.ports.http.port`             | Service port for web interface                                       | 8080                                              |
-| `service.ports.http.targetPort`       | Taret port for web interface service port                                      | 8080                                              |
-| `service.ports.ssh.port`              | Service port for ssh connections                      | 29418                                              |
-| `service.ports.ssh.targetPort`              | Target port for ssh service port                     | 29418                                              |
 | `ingress.hosts`                             | List of host configs for ingress (required; see example below)             | []    |
 | `ingress.tls`                             | List of ingress host tls configs (required; see example below)                                 | []     |
 | `persistence.enabled`                  | Boolean indicating whether Gerrit pod should have persistent volumes                                  | true     |

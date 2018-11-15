@@ -1,5 +1,4 @@
 {{- $fullName := include "gerrit.name" . -}}
-{{- $ingressPath := .Values.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -25,11 +24,11 @@ spec:
 {{- end }}
   rules:
   {{- range .Values.ingress.hosts }}
-    - host: {{ . | quote }}
+    - host: {{ .hostname }}
       http:
         paths:
-          - path: {{ $ingressPath }}
+          - path: {{ .path }}
             backend:
-              serviceName: {{ $fullName }}
+              serviceName: {{ $fullName }}-http
               servicePort: http
   {{- end }}

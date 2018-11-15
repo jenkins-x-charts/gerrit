@@ -1,23 +1,26 @@
+{{- $releaseName := .Release.Name -}}
+{{- $releaseService := .Release.Service -}}
+{{- $fullName := include "gerrit.name" . -}}
+{{- $chart := include "gerrit.chart" . -}}
+{{- range .Values.services -}}
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "gerrit.name" . }}
+  name: {{ $fullName }}-{{ .name }}
   labels:
-    app.kubernetes.io/name: {{ include "gerrit.name" . }}
-    helm.sh/chart: {{ include "gerrit.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ $fullName }}
+    helm.sh/chart: {{ $chart }}
+    app.kubernetes.io/instance: {{ $releaseName }}
+    app.kubernetes.io/managed-by: {{ $releaseService }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .type }}
   ports:
-    - port: {{ .Values.service.ports.http.port }}
-      targetPort: {{ .Values.service.ports.http.targetPort }}
+    - port: {{ .port }}
+      targetPort: {{ .targetPort }}
       protocol: TCP
-      name: http
-    - port: {{ .Values.service.ports.ssh.port }}
-      targetPort: {{ .Values.service.ports.ssh.targetPort }}
-      protocol: TCP
-      name: ssh
+      name: {{ .name }}
   selector:
-    app: {{ include "gerrit.name" . }}
-    release: {{ .Release.Name }}
+    app: {{ $fullName }}
+    release: {{ $releaseName }}
+{{ end -}}

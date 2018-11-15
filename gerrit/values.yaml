@@ -10,15 +10,15 @@ image:
 nameOverride: ""
 fullnameOverride: ""
 
-service:
-  type: ClusterIP
-  ports:
-    http:
-      port: 8080
-      targetPort: 8080
-    ssh:
-      port: 29418
-      targetPort: 29418
+services:
+  - type: ClusterIP
+    name: http
+    port: 8080
+    targetPort: 8080
+  - type: NodePort
+    name: ssh
+    port: 29418
+    targetPort: 29418
 
 ingress:
   hosts: []

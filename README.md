@@ -58,13 +58,13 @@ In order to use the Gerrit web interface, you must have a domain name and TLS ce
 
 ```yaml
 ingress:
-- path: /
   hosts:
-  - gerrit.example.com
-tls:
-- hosts:
-  - gerrit.example.com
-  secretName: gerrit.example.com
+  - path: /
+    hostname: gerrit.example.com
+  tls:
+  - hosts:
+    - gerrit.example.com
+    secretName: gerrit.example.com
 ```
 
 This assumes that you have a domain that resolves to the cluster (for instance, to an ELB that forwards to your Ingress controller), as well as a valid TLS certificate for that domain stored in a secret called `gerrit.example.com`. You could then pass it to helm when you install the chart: `helm install -f myValues.yaml jenkinsxio/gerrit`.
